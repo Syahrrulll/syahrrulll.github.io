@@ -108,8 +108,8 @@ footer {
 
 @media (max-width: 768px) {
     header img {
-        width: 40vw; /* Bisa lebih besar agar tetap terlihat */
-        left: -10vw;
-        top: 5px;
+        width: 30%; /* Bisa lebih besar agar tetap terlihat */
+        left: 5%;
+        top: 5px;   
     }
 }
