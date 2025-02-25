@@ -11,6 +11,12 @@ body {
     line-height: 1.6;
 }
 
+header img{
+    position: absolute;
+    width:18%;
+    left: 5%;
+    top: -10px;
+}
 
 header {
     background-color: grey;
@@ -48,7 +54,7 @@ nav a {
 }
 
 nav a:hover {
-    color: #f4f4f9;
+    color: #a92d07;
     border-bottom: 2px solid #fff;
 }
 main {
@@ -67,7 +73,7 @@ main {
     overflow: hidden;
     margin-bottom: 20px;
     box-shadow: 0 10px 14px rgba(0, 0, 0, 0.1);
-    transition: 0.3s;
+    transition: 0.5s;
 }
 
 .section-content:hover {
