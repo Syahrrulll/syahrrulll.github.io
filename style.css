@@ -11,12 +11,15 @@ body {
     line-height: 1.6;
 }
 
-header img{
+header img {
     position: absolute;
-    width:18%;
-    left: 10%;
-    top: -3px;
+    width: 18vw; /* Gunakan vw agar responsif sesuai lebar viewport */
+    left: 10vw; /* Gunakan vw agar posisi tetap proporsional */
+    top: -3px; /* Bisa disesuaikan jika perlu */
+    max-width: 100%; /* Mencegah gambar melebihi ukuran aslinya */
+    height: auto; /* Menjaga rasio gambar */
 }
+
 
 header {
     background-color: grey;
@@ -103,3 +106,10 @@ footer {
 }
 
 
+@media (max-width: 768px) {
+    header img {
+        width: 40vw; /* Bisa lebih besar agar tetap terlihat */
+        left: -10vw;
+        top: 5px;
+    }
+}
