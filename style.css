@@ -127,7 +127,8 @@ footer {
 @media (max-width: 480px) { /* HP kecil */
     header img {
         width: 35%;
-        left: 2%;       z-index: 1;
+        left: -6%;
+        top: 12.4vw;
         }
     header-text{
         z-index: 2;
