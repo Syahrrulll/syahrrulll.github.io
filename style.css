@@ -115,9 +115,10 @@ footer {
 }
 @media (max-width: 768px) { /* HP */
     header img {
-        width: 42%;
-        left: -10%;
+        width: 32%;
+        left: -4%;
         z-index: 1;
+        top: 12vw
 
     }
     header-text{
