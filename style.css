@@ -7,7 +7,7 @@
 
 body {
     background-color: #f4f4f9;
-    color: red;
+    color:black;
     line-height: 1.6;
 }
 
@@ -23,6 +23,10 @@ header h1 {
     margin-bottom: 0.3em;
 }
 
+header p{
+    font-family: Arial;
+}
+
 nav {
     background-color: rgb(76, 76, 76);
     padding: 1em 0;
@@ -36,10 +40,11 @@ nav ul {
 }
 
 nav a {
-    color: #fff;
+    color: #ffffff;
     text-decoration: none;
     font-size: 1.1em;
     font-weight: bold;
+    transition: 1s;
 }
 
 nav a:hover {
@@ -56,7 +61,7 @@ main {
 .section-content {
     text-align: center;
     background-color: #fff;
-    border: 1px solid #000000;
+    border: 1px solid #464646;
     border-radius: 40px;
     padding: 1px;
     overflow: hidden;
@@ -68,11 +73,11 @@ main {
 .section-content:hover {
     padding: 20px;
     border-radius: 25px;
-    background-color: rgba(128, 128, 128, 0.766)
+    /* background-color: rgba(128, 128, 128, 0.766) */
 }
 
 .section-content h2 {
-    color: #333;
+    color: #fd3e3e;
     margin-bottom: 0.5em;
 }
 
