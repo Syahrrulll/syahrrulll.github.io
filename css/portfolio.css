@@ -150,7 +150,7 @@ header {
     width: 25%;
     border-radius: 50%;
     border: 3px solid var(--primary-color);
-    transition: transform 0.3s ease;
+    transition: transform 1s ease;
 }
 
 .profile-pic:hover {
@@ -504,6 +504,7 @@ section {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     color: #ddd;
     background: #2b2b2b;
+    
     transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
     border: 2px solid transparent;
 }
@@ -566,5 +567,100 @@ section {
 @media (max-width: 600px) {
     section {
         padding: 10px;
+    }
+}
+
+/* ======= BAGIAN HASIL FOTOGRAFI ======= */
+.photography {
+    background: #272727;
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+.photo-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.photo-card {
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+
+.photo-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.photo-card p {
+    color: #ddd;
+    padding: 10px;
+    font-size: 1em;
+    background: var(--primary-color);
+}
+
+/* Hover efek */
+.photo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(255, 87, 87, 0.8);
+}
+
+/* ======= BAGIAN PROJEK ======= */
+.projects {
+    background: #1f1f1f;
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+.project-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.project-card {
+    background: linear-gradient(145deg, #e53935, #b71c1c);
+    padding: 15px;
+    border-radius: 10px;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Hover efek */
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(255, 87, 87, 0.8);
+}
+
+.project-card h3 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.project-card p {
+    color: #ddd;
+    font-size: 0.9em;
+}
+
+/* ======= RESPONSIF ======= */
+@media (max-width: 600px) {
+    .photo-card, .project-card {
+        width: 80%;
     }
 }
