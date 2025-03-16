@@ -57,51 +57,47 @@
             <section class="certificates">
                 <h2>Sertifikat</h2>
                 <div class="certificate-list">
-
-                    <div class="certificate-item" onclick="openModal('image/English_Camp.jpg')">
+                    <div class="certificate-item" onclick="openModal(0)">
                         <h3>English_Camp</h3>
                         <p>English Camp Season V | 2021</p>
                         <img src="image/English_Camp.jpg" alt="Sertifikat EC 5">
                     </div>
-
-                    <div class="certificate-item" onclick="openModal('image/ppmp.jpg')">
+            
+                    <div class="certificate-item" onclick="openModal(1)">
                         <h3>Perkemahan</h3>
                         <p>PPMP Sultra | 2022</p>
                         <img src="image/ppmp.jpg" alt="Sertifikat PPMP">
                     </div>
-                    
-                    <div class="certificate-item" onclick="openModal('image/kwu.jpg')">
+            
+                    <div class="certificate-item" onclick="openModal(2)">
                         <h3>Kewirausahaan</h3>
-                        <p>Tumbuh dan Tangguh di Era DIssrupsi | 2023</p>
+                        <p>Tumbuh dan Tangguh di Era Disrupsi | 2023</p>
                         <img src="image/kwu.jpg" alt="Sertifikat Kewirausahaan">
                     </div>
-
-                    <div class="certificate-item" onclick="openModal('image/juz.jpg')">
-                        <h3> Hafalan Qur'an</h3>
+            
+                    <div class="certificate-item" onclick="openModal(3)">
+                        <h3>Hafalan Qur'an</h3>
                         <p>Juz 30 | 2023</p>
-                        <img src="image/juz.jpg" alt="Sertifikat UI/UX">
+                        <img src="image/juz.jpg" alt="Sertifikat Hafalan Qur'an">
                     </div>
-
-                    
-                    
-                    <div class="certificate-item" onclick="openModal('image/Astra.jpg')">
+            
+                    <div class="certificate-item" onclick="openModal(4)">
                         <h3>Astra</h3>
-                        <p>Bincang inspiratif | 2024</p>
+                        <p>Bincang Inspiratif | 2024</p>
                         <img src="image/Astra.jpg" alt="Sertifikat Astra">
                     </div>
-                    
-                    <div class="certificate-item" onclick="openModal('image/mh.jpg')">
+            
+                    <div class="certificate-item" onclick="openModal(5)">
                         <h3>Mental Health</h3>
-                        <p> Mental Health | 2024</p>
+                        <p>Mental Health | 2024</p>
                         <img src="image/mh.jpg" alt="Sertifikat Mental Health">
                     </div>
-                    
-                    <div class="certificate-item" onclick="openModal('image/Tekken.jpg')">
+            
+                    <div class="certificate-item" onclick="openModal(6)">
                         <h3>Tekken 8</h3>
                         <p>Juara 2 | 2025</p>
                         <img src="image/Tekken.jpg" alt="Sertifikat Tekken 8">
                     </div>
-
                 </div>
             </section>
             
@@ -109,7 +105,10 @@
             <div id="certificateModal" class="modal">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <img class="modal-content" id="modalImage">
+                <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                <a class="next" onclick="changeSlide(1)">&#10095;</a>
             </div>
+            
             
     
             <section class="contact">
