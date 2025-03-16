@@ -1,0 +1,570 @@
+/* ========== TEMA WARNA UTAMA ========== */
+:root {
+    --primary-color: #e53935;
+    --secondary-color: #2b2b2b;
+    --text-color: #ddd;
+    --hover-color: #ff5555;
+}
+
+/* ========== SECTION DASAR ========== */
+section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    color: var(--text-color);
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* ========== TENTANG SAYA ========== */
+.about {
+    background: linear-gradient(145deg, #e53935, #b71c1c);
+    text-align: center;
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+}
+
+.about:hover {
+    transform: scale(1.05);
+}
+
+/* ========== KEMAMPUAN ========== */
+.skills {
+    background: #2b2b2b;
+    text-align: center;
+}
+
+#skill-list {
+    list-style: none;
+    padding: 0;
+}
+
+#skill-list li {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#skill-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px #ff5555;
+}
+
+/* ========== PENGALAMAN ========== */
+.experience {
+    background: #1f1f1f;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #444;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #333;
+}
+
+tr:hover {
+    background-color: #555;
+    transition: 0.3s ease;
+}
+
+/* ========== ANIMASI ========== */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIF */
+@media (max-width: 600px) {
+    #skill-list li {
+        display: block;
+        width: 80%;
+        margin: 5px auto;
+    }
+
+    table {
+        font-size: 14px;
+    }
+}
+
+body{
+    background-color: var(--secondary-color);
+
+}
+
+/* Body & Layout */
+.boddy {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container utama */
+.cv-container {
+    width: 80%;
+    max-width: 800px;
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s forwards;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 25%;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.profile-pic:hover {
+    transform: scale(1.05);
+}
+
+/* Heading dan teks */
+h1 {
+    color: var(--primary-color);
+    margin: 10px 0;
+}
+
+h2 {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 5px;
+}
+
+/* Bagian konten */
+section {
+    margin-bottom: 20px;
+}
+
+/* Daftar skill */
+.skills ul {
+    list-style: none;
+    padding: 0;
+}
+
+.skills li {
+    background-color: var(--primary-color);
+    color: #fff;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+}
+
+.skills li:hover {
+    transform: scale(1.1);
+}
+
+/* Tabel */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* Formulir */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, textarea {
+    background-color: #333;
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    transition: 0.3s ease;
+}
+
+/* Efek saat input aktif */
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--hover-color);
+}
+
+/* Tombol */
+button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--hover-color);
+}
+
+/* Animasi Fade In */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.about h2{
+    text-align: center;
+}
+
+
+
+.skills h2{
+    text-align: center;
+}
+
+.experience h2{
+    text-align: center;
+}
+
+/* Bagian Sertifikat */
+.certificates {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.certificate-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+/* Sertifikat Item */
+.certificate-item {
+    background-color: #222;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    width: 300px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.certificate-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.certificate-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.certificate-item p {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.certificate-item img {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: transform 0.3s ease;
+}
+
+.certificate-item img:hover {
+    transform: scale(1.05);
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    display: block;
+    margin: auto;
+    width: 60%;
+    max-width: 700px;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.modal-content:hover {
+    transform: scale(1.02);
+}
+
+/* Tombol Close */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: var(--primary-color);
+}
+
+/* Animasi Modal */
+@keyframes fadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+/* Footer */
+footer {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 20px 0;
+    text-align: center;
+    border-top: 2px solid var(--primary-color);
+    margin-top: 20px;
+    animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.footer-content p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+/* Sosial Media */
+.social-icons a {
+    color: var(--primary-color);
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: var(--hover-color);
+    text-shadow: 0 0 10px var(--hover-color);
+}
+
+/* Animasi Fade In Footer */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer Styling */
+footer {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 20px 0;
+    text-align: center;
+    border-top: 2px solid var(--primary-color);
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards;
+    width: 100%;
+    /* bottom: -100%; */
+    position:relative;
+}
+
+/* Text footer */
+.footer-content p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+/* Social Icons Styling */
+.social-icons a {
+    color: var(--primary-color);
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: var(--hover-color);
+    text-shadow: 0 0 10px var(--hover-color);
+}
+
+/* Tombol Back to Top */
+#backToTop {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 10;
+}
+
+#backToTop:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px var(--hover-color);
+}
+
+/* Animasi Footer */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsif Mobile */
+@media (max-width: 600px) {
+    .footer-content p {
+        font-size: 12px;
+    }
+
+    #backToTop {
+        padding: 8px 10px;
+        font-size: 18px;
+    }
+}
+
+/* ========== STYLE DASAR SECTION ========== */
+section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    color: #ddd;
+    background: #2b2b2b;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    border: 2px solid transparent;
+}
+
+/* ======= HOVER BORDER MEMBESAR PER SECTION ======= */
+section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(255, 87, 87, 0.8);
+    border: 1px solid hsl(1, 77%, 55%);
+    padding: 50px;
+}
+
+/* ======= TENTANG SAYA ======= */
+.about {
+    background: linear-gradient(145deg, #e53935, #b71c1c);
+    text-align: center;
+    font-size: 1.2em;
+}
+
+/* ======= KEMAMPUAN ======= */
+.skills {
+    background: #2b2b2b;
+    text-align: center;
+}
+
+/* ======= PENGALAMAN KERJA ======= */
+.experience {
+    background: #1f1f1f;
+    text-align: center;
+}
+
+/* ======= SERTIFIKAT ======= */
+.certificates {
+    background: #272727;
+    text-align: center;
+}
+
+/* ======= HUBUNGI SAYA ======= */
+.contact {
+    background: linear-gradient(145deg, #b71c1c, #e53935);
+    text-align: center;
+}
+
+/* ======= ANIMASI MUNCUL ======= */
+section {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+/* Animasi fade-in dari bawah */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIF untuk mobile */
+@media (max-width: 600px) {
+    section {
+        padding: 10px;
+    }
+}

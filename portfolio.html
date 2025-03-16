@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Digital Minimalis</title>
+    <link rel="stylesheet" href="css/portfolio.css">
+</head>
+<body>
+    <div class="boddy">
+        <div class="cv-container">
+            <header>
+                <img src="image/profil.jpg" alt="Foto Profil" class="profile-pic">
+                <h1>Muhammad Syahrul Mubarak</h1>
+                <p>Web Developer | Designer | Gamer | Editing | Fotografi</p>
+            </header>
+
+            <section class="about">
+                <h2>Tentang Saya</h2>
+                <p>Saya seorang pengembang web dengan pengalaman dalam PHP, HTML, CSS, Python, dan JavaScript.</p>
+            </section>
+            
+            <section class="skills">
+                <h2>Kemampuan</h2>
+                <ul id="skill-list">
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                    <li>Python</li>
+                    <li>PHP</li>
+                </ul>
+            </section>
+            
+            <section class="experience">
+                <h2>Pengalaman Kerja</h2>
+                <table>
+                    <tr>
+                        <th>Perusahaan</th>
+                        <th>Jabatan</th>
+                        <th>Tahun</th>
+                    </tr>
+                    <tr>
+                        <td>Universitas Haluoelo</td>
+                        <td>Asisten Dosen Algoritma Pemrograman</td>
+                        <td>2024 - 2025</td>
+                    </tr>
+                    <tr>
+                        <td>MAN 1 Muna</td>
+                        <td>Dewan Ambalan</td>
+                        <td>2022 - 2023</td>
+                    </tr>
+                </table>
+            </section>
+            
+    
+            <section class="certificates">
+                <h2>Sertifikat</h2>
+                <div class="certificate-list">
+
+                    <div class="certificate-item" onclick="openModal('image/English_Camp.jpg')">
+                        <h3>English_Camp</h3>
+                        <p>English Camp Season V | 2021</p>
+                        <img src="image/English_Camp.jpg" alt="Sertifikat EC 5">
+                    </div>
+
+                    <div class="certificate-item" onclick="openModal('image/ppmp.jpg')">
+                        <h3>Perkemahan</h3>
+                        <p>PPMP Sultra | 2022</p>
+                        <img src="image/ppmp.jpg" alt="Sertifikat PPMP">
+                    </div>
+                    
+                    <div class="certificate-item" onclick="openModal('image/kwu.jpg')">
+                        <h3>Kewirausahaan</h3>
+                        <p>Tumbuh dan Tangguh di Era DIssrupsi | 2023</p>
+                        <img src="image/kwu.jpg" alt="Sertifikat Kewirausahaan">
+                    </div>
+
+                    <div class="certificate-item" onclick="openModal('image/juz.jpg')">
+                        <h3> Hafalan Qur'an</h3>
+                        <p>Juz 30 | 2023</p>
+                        <img src="image/juz.jpg" alt="Sertifikat UI/UX">
+                    </div>
+
+                    
+                    
+                    <div class="certificate-item" onclick="openModal('image/Astra.jpg')">
+                        <h3>Astra</h3>
+                        <p>Bincang inspiratif | 2024</p>
+                        <img src="image/Astra.jpg" alt="Sertifikat Astra">
+                    </div>
+                    
+                    <div class="certificate-item" onclick="openModal('image/mh.jpg')">
+                        <h3>Mental Health</h3>
+                        <p> Mental Health | 2024</p>
+                        <img src="image/mh.jpg" alt="Sertifikat Mental Health">
+                    </div>
+                    
+                    <div class="certificate-item" onclick="openModal('image/Tekken.jpg')">
+                        <h3>Tekken 8</h3>
+                        <p>Juara 2 | 2025</p>
+                        <img src="image/Tekken.jpg" alt="Sertifikat Tekken 8">
+                    </div>
+
+                </div>
+            </section>
+            
+            <!-- Modal Sertifikat -->
+            <div id="certificateModal" class="modal">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <img class="modal-content" id="modalImage">
+            </div>
+            
+    
+            <section class="contact">
+                <h2>Hubungi Saya</h2>
+                <form id="contactForm">
+                    <label for="name">Nama:</label>
+                    <input type="text" id="name" placeholder="Nama Anda" required>
+            
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="Email Anda" required>
+            
+                    <label for="message">Pesan:</label>
+                    <textarea id="message" placeholder="Tulis pesan Anda" required></textarea>
+            
+                    <button type="submit">Kirim</button>
+                </form>
+            </section>
+            
+            
+        </div>
+        
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Nama Syahrul | Dibuat dengan saanttuuyy</p>
+            <div class="social-icons">
+                <a href="https://www.linkedin.com/in/muhammad-syahrul-mubarak-a06538355/" target="_blank">LinkedIn</a>
+                <a href="https://github.com/Syahrrulll" target="_blank">GitHub</a>
+                <a href="https://www.instagram.com/syahrrull1/" target="_blank">Instagram</a>
+            </div>
+        </div>
+        
+        <!-- Tombol Back to Top -->
+        <button id="backToTop" title="Kembali ke atas">&#8679;</button>
+    </footer>
+    
+    <script src="js/portfolio.js"></script>
+</body>
+
+
+
+</html>
