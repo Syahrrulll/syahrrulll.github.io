@@ -110,12 +110,16 @@ tr:hover {
 }
 
 body{
+     background: url('image/bekron.png') no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
     background-color: var(--secondary-color);
-
+    
 }
 
 /* Body & Layout */
 .boddy {
+    
     font-family: 'Arial', sans-serif;
     background-color: var(--secondary-color);
     color: var(--text-color);
@@ -139,6 +143,7 @@ body{
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 0.8s forwards;
+    margin-bottom: 20px;
 }
 
 /* Header */
@@ -718,3 +723,4 @@ section {
         transform: scale(1);
     }
 }
+
