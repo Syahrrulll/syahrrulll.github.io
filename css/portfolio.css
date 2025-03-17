@@ -129,6 +129,7 @@ body{
 
 /* Container utama */
 .cv-container {
+    margin-top: 20px;
     width: 80%;
     max-width: 800px;
     background-color: #222;
