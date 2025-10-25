@@ -356,62 +356,91 @@
             color: var(--dark);
         }
         
-        .coming-soon {
+        /* Galeri Fotografi Styles */
+        .gallery-section {
             text-align: center;
-            padding: 4rem 2rem;
-            background: var(--gradient-red);
-            color: white;
-            border-radius: 20px;
+        }
+        
+        .gallery-intro {
+            margin-bottom: 3rem;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 2rem;
+        }
+        
+        .photo-card {
             position: relative;
+            border-radius: 15px;
             overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
         }
         
-        .coming-soon::before {
-            content: "";
+        .photo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .photo-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .photo-card:hover .photo-img {
+            transform: scale(1.05);
+        }
+        
+        .photo-overlay {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
-            animation: pulse 3s infinite;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
         }
         
-        @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-            100% { transform: scale(0.8); opacity: 0.5; }
+        .photo-card:hover .photo-overlay {
+            transform: translateY(0);
         }
         
-        .coming-soon h3 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        .photo-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
         }
         
-        .coming-soon p {
-            font-size: 1.3rem;
-            position: relative;
-            margin-bottom: 2rem;
+        .photo-desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
         
         .instagram-btn {
             display: inline-block;
-            background: white;
-            color: var(--primary);
+            background: var(--gradient-red);
+            color: white;
             padding: 12px 30px;
             border-radius: 30px;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(229, 57, 53, 0.4);
+            margin-top: 2rem;
         }
         
         .instagram-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            color: var(--primary-dark);
+            box-shadow: 0 10px 20px rgba(229, 57, 53, 0.5);
+            color: white;
         }
         
         footer {
@@ -498,6 +527,28 @@
             }
         }
         
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .modal-header {
+            background: var(--gradient-red);
+            color: white;
+            border-bottom: none;
+        }
+        
+        .modal-body {
+            padding: 0;
+        }
+        
+        .modal-body img {
+            width: 100%;
+            height: auto;
+        }
+        
         /* Responsive Design */
         @media (max-width: 992px) {
             header h1 {
@@ -506,6 +557,10 @@
             
             .section-content {
                 padding: 2.5rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
         }
         
@@ -543,8 +598,8 @@
                 grid-template-columns: 1fr;
             }
             
-            .coming-soon h3 {
-                font-size: 2.5rem;
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
         }
         
@@ -570,6 +625,10 @@
                 width: 50px;
                 height: 50px;
                 font-size: 1.3rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -620,7 +679,7 @@
                         <a class="nav-link" href="#games"><i class="fas fa-gamepad me-2"></i> Game Favorit</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#portfolio"><i class="fas fa-camera me-2"></i> Fotografi</a>
+                        <a class="nav-link" href="#photography"><i class="fas fa-camera me-2"></i> Fotografi</a>
                     </li>
                 </ul>
             </div>
@@ -717,16 +776,73 @@
                 </div>
             </section>
 
-            <!-- Portfolio Section -->
-            <section id="portfolio" class="section-content">
-                <h2><i class="fas fa-camera"></i> Fotografi</h2>
-                <div class="coming-soon">
-                    <h3>GALERI FOTO</h3>
-                    <p>Lihat koleksi foto-foto menarik dari Instagram saya</p>
-                    <a href="https://www.instagram.com/syahrrull1/" target="_blank" class="instagram-btn">
-                        <i class="fab fa-instagram me-2"></i> Kunjungi Instagram
-                    </a>
+            <!-- Photography Section -->
+            <section id="photography" class="section-content gallery-section">
+                <h2><i class="fas fa-camera"></i> Galeri Fotografi</h2>
+                
+                <div class="gallery-intro">
+                    <p>Ini adalah koleksi beberapa foto yang saya ambil. Fotografi adalah salah satu hobi saya yang paling saya nikmati. Saya suka mengabadikan momen-momen indah dalam kehidupan sehari-hari.</p>
                 </div>
+                
+                <div class="gallery-grid">
+                    <!-- Photo 1 -->
+                    <div class="photo-card" data-bs-toggle="modal" data-bs-target="#photoModal1">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pemandangan Gunung" class="photo-img">
+                        <div class="photo-overlay">
+                            <div class="photo-title">Pemandangan Gunung</div>
+                            <div class="photo-desc">Sunrise di pagi hari</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo 2 -->
+                    <div class="photo-card" data-bs-toggle="modal" data-bs-target="#photoModal2">
+                        <img src="https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Perkotaan Malam" class="photo-img">
+                        <div class="photo-overlay">
+                            <div class="photo-title">Perkotaan Malam</div>
+                            <div class="photo-desc">Cahaya kota di malam hari</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo 3 -->
+                    <div class="photo-card" data-bs-toggle="modal" data-bs-target="#photoModal3">
+                        <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Alam Terbuka" class="photo-img">
+                        <div class="photo-overlay">
+                            <div class="photo-title">Alam Terbuka</div>
+                            <div class="photo-desc">Pemandangan hijau yang menenangkan</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo 4 -->
+                    <div class="photo-card" data-bs-toggle="modal" data-bs-target="#photoModal4">
+                        <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Musik dan Seni" class="photo-img">
+                        <div class="photo-overlay">
+                            <div class="photo-title">Musik dan Seni</div>
+                            <div class="photo-desc">Momen dalam pertunjukan musik</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo 5 -->
+                    <div class="photo-card" data-bs-toggle="modal" data-bs-target="#photoModal5">
+                        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pemandangan Alam" class="photo-img">
+                        <div class="photo-overlay">
+                            <div class="photo-title">Pemandangan Alam</div>
+                            <div class="photo-desc">Keindahan alam yang memukau</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo 6 -->
+                    <div class="photo-card" data-bs-toggle="modal" data-bs-target="#photoModal6">
+                        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pedesaan yang Tenang" class="photo-img">
+                        <div class="photo-overlay">
+                            <div class="photo-title">Pedesaan yang Tenang</div>
+                            <div class="photo-desc">Kehidupan sederhana di pedesaan</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="https://www.instagram.com/syahrrull1/" target="_blank" class="instagram-btn">
+                    <i class="fab fa-instagram me-2"></i> Lihat Lebih Banyak di Instagram
+                </a>
             </section>
         </div>
     </main>
@@ -751,6 +867,91 @@
             <p>&copy; 2024 Blog Pribadi Syahrul | Dibuat dengan semangat, inspirasi dan sedikit gabut.</p>
         </div>
     </footer>
+
+    <!-- Photo Modals -->
+    <div class="modal fade" id="photoModal1" tabindex="-1" aria-labelledby="photoModalLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel1">Pemandangan Gunung</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Pemandangan Gunung">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="photoModal2" tabindex="-1" aria-labelledby="photoModalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel2">Perkotaan Malam</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Perkotaan Malam">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="photoModal3" tabindex="-1" aria-labelledby="photoModalLabel3" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel3">Alam Terbuka</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Alam Terbuka">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="photoModal4" tabindex="-1" aria-labelledby="photoModalLabel4" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel4">Musik dan Seni</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Musik dan Seni">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="photoModal5" tabindex="-1" aria-labelledby="photoModalLabel5" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel5">Pemandangan Alam</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Pemandangan Alam">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="photoModal6" tabindex="-1" aria-labelledby="photoModalLabel6" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel6">Pedesaan yang Tenang</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Pedesaan yang Tenang">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
