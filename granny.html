@@ -96,10 +96,9 @@
 
     <!-- ================== HALAMAN SETUP (Awal) ================== -->
     <!-- FIX MOBILE: justify-start + pt-12 agar judul tidak kepotong di HP -->
-    <div id="setup-screen" class="flex-1 flex flex-col justify-start md:justify-center items-center p-4 overflow-y-auto relative z-10 w-full pt-12 md:pt-0">
+    <div id="setup-screen" class="flex-1 flex flex-col justify-start md:justify-center items-center p-4 overflow-y-auto relative z-10 w-full pt-10 md:pt-0">
         
         <!-- Judul Besar -->
-        <!-- FIX MOBILE: Hapus animate-bounce agar layout stabil, tambah shrink-0 -->
         <div class="mb-6 md:mb-8 text-center shrink-0">
             <h1 class="text-5xl md:text-6xl font-game text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-lg tracking-wider">
                 GRANNY
@@ -107,7 +106,6 @@
             <p class="text-gray-400 tracking-[0.3em] text-[10px] md:text-sm font-semibold mt-1">Yeah Game</p>
         </div>
 
-        <!-- FIX MOBILE: shrink-0 agar panel tidak gepeng -->
         <div class="glass-panel p-5 md:p-8 rounded-2xl shadow-2xl w-full max-w-md mx-auto border border-white/10 shrink-0 mb-6">
             
             <!-- Input Waktu -->
@@ -130,9 +128,10 @@
             <!-- Input Pemain Baru -->
             <div class="mb-4">
                 <label class="block text-xs text-gray-400 mb-2 font-bold uppercase tracking-wide">Nama Pemain</label>
+                <!-- FIX UI: shrink-0 pada tombol agar tidak gepeng -->
                 <div class="flex gap-2">
-                    <input type="text" id="input-player-name" placeholder="Ketik nama..." class="flex-1 bg-gray-800 border border-gray-600 p-3 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500" onkeypress="handleEnter(event)">
-                    <button onclick="addPlayerFromInput()" class="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-5 rounded-lg font-bold shadow-lg transition flex items-center justify-center">
+                    <input type="text" id="input-player-name" placeholder="Ketik nama..." class="flex-1 min-w-0 bg-gray-800 border border-gray-600 p-3 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500" onkeypress="handleEnter(event)">
+                    <button onclick="addPlayerFromInput()" class="shrink-0 bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-5 rounded-lg font-bold shadow-lg transition flex items-center justify-center">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -205,9 +204,10 @@
     </div>
 
     <!-- ================== HALAMAN GAME (Main) ================== -->
-    <div id="game-screen" class="hidden flex-1 relative flex flex-col z-10 h-full">
+    <!-- FIX MOBILE: Ubah layout jadi flex-col dengan space-between agar konten tersebar rata -->
+    <div id="game-screen" class="hidden flex-1 relative flex flex-col justify-between h-full pt-20 pb-4">
         
-        <!-- Header Info (Mobile Optimized) -->
+        <!-- Header Info (Absolute di atas) -->
         <div class="absolute top-0 left-0 w-full p-3 md:p-6 flex justify-between items-start z-20 pointer-events-none">
             <!-- Box Nama Granny -->
             <div class="glass-panel px-3 py-2 rounded-lg border-l-4 border-yellow-500 max-w-[50%] pointer-events-auto shadow-lg">
@@ -229,31 +229,35 @@
         </div>
 
         <!-- Area Timer Tengah -->
+        <!-- FIX MOBILE: justify-center dengan flex-1 agar mengambil ruang tengah -->
         <div class="flex-1 flex flex-col justify-center items-center z-10 relative px-4">
             <!-- Status Text -->
-            <!-- FIX MOBILE: Margin top lebih kecil di mobile agar tidak mepet header -->
-            <div id="status-container" class="mb-2 md:mb-8 transform transition-transform duration-300 mt-20 md:mt-0">
-                <h1 id="status-text" class="text-3xl md:text-6xl font-game uppercase tracking-widest text-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">SIAP?</h1>
+            <!-- FIX MOBILE: Margin top disesuaikan agar tidak terlalu turun -->
+            <div id="status-container" class="mb-4 transform transition-transform duration-300">
+                <h1 id="status-text" class="text-4xl md:text-6xl font-game uppercase tracking-widest text-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">SIAP?</h1>
             </div>
             
             <!-- Timer (Responsive Text Size) -->
             <div class="relative group w-full flex justify-center">
                 <!-- Ring hanya hiasan desktop/tablet, di hp bisa mengganggu kalau terlalu besar -->
                 <div id="timer-ring" class="hidden md:block absolute -inset-8 rounded-full border-4 border-white/10 opacity-50 scale-90 transition-transform duration-700"></div>
-                <!-- FIX MOBILE: text-7xl agar tidak overflow di layar kecil -->
-                <div id="timer-display" class="text-7xl md:text-9xl lg:text-[13rem] font-digital font-bold leading-none drop-shadow-2xl tabular-nums tracking-tighter text-white transition-colors duration-300 text-center">00</div>
+                <!-- FIX MOBILE: text-6xl (mobile) -> text-9xl (tablet) -> text-13xl (desktop) -->
+                <div id="timer-display" class="text-6xl md:text-9xl lg:text-[13rem] font-digital font-bold leading-none drop-shadow-2xl tabular-nums tracking-tighter text-white transition-colors duration-300 text-center">00</div>
             </div>
         </div>
 
         <!-- Tombol Kontrol Bawah (Mobile Optimized) -->
-        <div class="p-4 md:p-8 pb-8 md:pb-12 flex flex-col md:flex-row justify-center gap-3 md:gap-4 z-20 w-full max-w-2xl mx-auto">
-            <button onclick="togglePause()" id="btn-pause" class="w-full md:flex-1 bg-white text-black py-4 md:py-5 rounded-2xl font-black text-lg md:text-2xl shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-gray-100 transition border-b-[6px] border-gray-300 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3 order-1 md:order-none">
-                <i class="fas fa-hand-paper"></i> STOP / TANGKAP
-            </button>
-            <!-- Tombol Reset kecil di mobile -->
-            <button onclick="resetGame()" class="w-full md:w-auto bg-gray-800 text-red-500 px-6 py-3 md:py-4 rounded-xl font-bold text-sm md:text-lg hover:bg-gray-700 transition border border-gray-700 hover:text-red-400 order-2 md:order-none">
-                <i class="fas fa-power-off mr-2 md:mr-0"></i> <span class="md:hidden">RESET GAME</span>
-            </button>
+        <!-- FIX MOBILE: padding bawah lebih aman (pb-4) dan flex-col untuk tombol -->
+        <div class="p-4 w-full max-w-2xl mx-auto z-20 shrink-0">
+            <div class="flex flex-col md:flex-row gap-3">
+                <button onclick="togglePause()" id="btn-pause" class="w-full md:flex-1 bg-white text-black py-4 rounded-xl font-black text-lg md:text-2xl shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-gray-100 transition border-b-[6px] border-gray-300 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3">
+                    <i class="fas fa-hand-paper"></i> STOP / TANGKAP
+                </button>
+                <!-- Tombol Reset kecil di mobile -->
+                <button onclick="resetGame()" class="w-full md:w-auto bg-gray-800 text-red-500 px-6 py-3 rounded-xl font-bold text-sm md:text-lg hover:bg-gray-700 transition border border-gray-700 hover:text-red-400 flex items-center justify-center gap-2">
+                    <i class="fas fa-power-off"></i> <span class="md:hidden">RESET</span>
+                </button>
+            </div>
         </div>
 
         <!-- Modal Seleksi Siapa yang Kena -->
