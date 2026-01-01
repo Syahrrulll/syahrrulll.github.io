@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Granny Game - Ultimate Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -17,8 +17,9 @@
             font-family: 'Poppins', sans-serif;
             background-color: #111827;
             overflow: hidden;
-            /* Mencegah pull-to-refresh pada mobile */
             overscroll-behavior: none;
+            /* FIX MOBILE: Gunakan dynamic height untuk menghindari address bar */
+            height: 100dvh; 
         }
 
         /* Background Pattern */
@@ -85,7 +86,7 @@
         }
     </style>
 </head>
-<body class="text-white h-screen flex flex-col relative touch-manipulation">
+<body class="text-white flex flex-col relative touch-manipulation h-full">
 
     <!-- Background Layer yang berubah warna -->
     <div id="game-bg" class="absolute inset-0 bg-gray-900 z-[-2]"></div>
@@ -95,8 +96,7 @@
     <div id="vignette-overlay" class="vignette hidden transition-opacity duration-500 opacity-0"></div>
 
     <!-- ================== HALAMAN SETUP (Awal) ================== -->
-    <!-- FIX MOBILE: justify-start + pt-12 agar judul tidak kepotong di HP -->
-    <div id="setup-screen" class="flex-1 flex flex-col justify-start md:justify-center items-center p-4 overflow-y-auto relative z-10 w-full pt-10 md:pt-0">
+    <div id="setup-screen" class="flex-1 flex flex-col justify-start md:justify-center items-center p-4 overflow-y-auto relative z-10 w-full pt-12 md:pt-0">
         
         <!-- Judul Besar -->
         <div class="mb-6 md:mb-8 text-center shrink-0">
@@ -128,7 +128,6 @@
             <!-- Input Pemain Baru -->
             <div class="mb-4">
                 <label class="block text-xs text-gray-400 mb-2 font-bold uppercase tracking-wide">Nama Pemain</label>
-                <!-- FIX UI: shrink-0 pada tombol agar tidak gepeng -->
                 <div class="flex gap-2">
                     <input type="text" id="input-player-name" placeholder="Ketik nama..." class="flex-1 min-w-0 bg-gray-800 border border-gray-600 p-3 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500" onkeypress="handleEnter(event)">
                     <button onclick="addPlayerFromInput()" class="shrink-0 bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-5 rounded-lg font-bold shadow-lg transition flex items-center justify-center">
@@ -204,8 +203,8 @@
     </div>
 
     <!-- ================== HALAMAN GAME (Main) ================== -->
-    <!-- FIX MOBILE: Ubah layout jadi flex-col dengan space-between agar konten tersebar rata -->
-    <div id="game-screen" class="hidden flex-1 relative flex flex-col justify-between h-full pt-20 pb-4">
+    <!-- FIX MOBILE: h-full dan pb-safe untuk menghindari tombol terpotong -->
+    <div id="game-screen" class="hidden flex-1 relative flex flex-col justify-between h-full pt-20 pb-safe">
         
         <!-- Header Info (Absolute di atas) -->
         <div class="absolute top-0 left-0 w-full p-3 md:p-6 flex justify-between items-start z-20 pointer-events-none">
@@ -229,10 +228,8 @@
         </div>
 
         <!-- Area Timer Tengah -->
-        <!-- FIX MOBILE: justify-center dengan flex-1 agar mengambil ruang tengah -->
         <div class="flex-1 flex flex-col justify-center items-center z-10 relative px-4">
             <!-- Status Text -->
-            <!-- FIX MOBILE: Margin top disesuaikan agar tidak terlalu turun -->
             <div id="status-container" class="mb-4 transform transition-transform duration-300">
                 <h1 id="status-text" class="text-4xl md:text-6xl font-game uppercase tracking-widest text-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">SIAP?</h1>
             </div>
@@ -241,19 +238,18 @@
             <div class="relative group w-full flex justify-center">
                 <!-- Ring hanya hiasan desktop/tablet, di hp bisa mengganggu kalau terlalu besar -->
                 <div id="timer-ring" class="hidden md:block absolute -inset-8 rounded-full border-4 border-white/10 opacity-50 scale-90 transition-transform duration-700"></div>
-                <!-- FIX MOBILE: text-6xl (mobile) -> text-9xl (tablet) -> text-13xl (desktop) -->
                 <div id="timer-display" class="text-6xl md:text-9xl lg:text-[13rem] font-digital font-bold leading-none drop-shadow-2xl tabular-nums tracking-tighter text-white transition-colors duration-300 text-center">00</div>
             </div>
         </div>
 
         <!-- Tombol Kontrol Bawah (Mobile Optimized) -->
-        <!-- FIX MOBILE: padding bawah lebih aman (pb-4) dan flex-col untuk tombol -->
-        <div class="p-4 w-full max-w-2xl mx-auto z-20 shrink-0">
+        <!-- FIX MOBILE: shrink-0 + pb-6 agar tidak mepet bawah layar -->
+        <div class="p-4 w-full max-w-2xl mx-auto z-20 shrink-0 pb-6 md:pb-12">
             <div class="flex flex-col md:flex-row gap-3">
                 <button onclick="togglePause()" id="btn-pause" class="w-full md:flex-1 bg-white text-black py-4 rounded-xl font-black text-lg md:text-2xl shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-gray-100 transition border-b-[6px] border-gray-300 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3">
                     <i class="fas fa-hand-paper"></i> STOP / TANGKAP
                 </button>
-                <!-- Tombol Reset kecil di mobile -->
+                <!-- Tombol Reset -->
                 <button onclick="resetGame()" class="w-full md:w-auto bg-gray-800 text-red-500 px-6 py-3 rounded-xl font-bold text-sm md:text-lg hover:bg-gray-700 transition border border-gray-700 hover:text-red-400 flex items-center justify-center gap-2">
                     <i class="fas fa-power-off"></i> <span class="md:hidden">RESET</span>
                 </button>
@@ -288,7 +284,7 @@
         // Timer Durasi Granny
         let grannySessionSeconds = 0;
 
-        // --- SOUND SYSTEM (Web Audio API - Enhanced) ---
+        // --- SOUND SYSTEM (Web Audio API - SUPER LOUD) ---
         const SoundSystem = {
             ctx: null,
             dangerInterval: null, 
@@ -303,9 +299,11 @@
             },
             play: function(type) {
                 this.init();
+                // Selalu resume jika terhenti (PENTING UNTUK MOBILE)
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+
                 const t = this.ctx.currentTime;
                 
-                // Helper to create basic osc chain
                 const createOsc = (waveType) => {
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
@@ -316,7 +314,6 @@
                 };
 
                 if (type === 'click') {
-                    // UI Click - High Tech Blip
                     const { osc, gain } = createOsc('sine');
                     osc.frequency.setValueAtTime(1000, t);
                     osc.frequency.exponentialRampToValueAtTime(100, t + 0.1);
@@ -326,8 +323,7 @@
                     osc.stop(t + 0.1);
                 } 
                 else if (type === 'start') {
-                    // Success Chord (C Major Arpeggio-ish)
-                    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                    const notes = [523.25, 659.25, 783.99]; 
                     notes.forEach((freq, i) => {
                         const osc = this.ctx.createOscillator();
                         const gain = this.ctx.createGain();
@@ -335,12 +331,11 @@
                         osc.connect(gain);
                         gain.connect(this.ctx.destination);
                         
-                        // Strum effect
                         const start = t + (i * 0.05);
                         osc.frequency.value = freq;
                         
                         gain.gain.setValueAtTime(0, start);
-                        gain.gain.linearRampToValueAtTime(0.1, start + 0.05);
+                        gain.gain.linearRampToValueAtTime(0.3, start + 0.05);
                         gain.gain.exponentialRampToValueAtTime(0.001, start + 1.2);
                         
                         osc.start(start);
@@ -348,60 +343,58 @@
                     });
                 }
                 else if (type === 'tick') {
-                    // Mechanical Tick
                     const { osc, gain } = createOsc('square');
                     osc.frequency.setValueAtTime(800, t);
-                    gain.gain.setValueAtTime(0.08, t);
+                    gain.gain.setValueAtTime(0.1, t);
                     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
                     osc.start(t);
                     osc.stop(t + 0.03);
                 }
                 else if (type === 'alarm') {
-                    // Warning Siren (Modulated Sawtooth) - LEBIH NYARING & KERAS
+                    // SUPER LOUD SIREN
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
                     
                     osc.type = 'sawtooth';
-                    // Pitch sweep up/down higher frequencies
                     osc.frequency.setValueAtTime(600, t);
                     osc.frequency.linearRampToValueAtTime(1200, t + 0.4);
                     osc.frequency.linearRampToValueAtTime(600, t + 0.8);
 
-                    // Increase volume
-                    gain.gain.setValueAtTime(0.5, t);
-                    gain.gain.linearRampToValueAtTime(0.5, t + 0.6);
+                    // Gain naik ke 0.8 (Hampir Max)
+                    gain.gain.setValueAtTime(0.8, t);
+                    gain.gain.linearRampToValueAtTime(0.8, t + 0.6);
                     gain.gain.linearRampToValueAtTime(0.001, t + 0.8);
                     
                     osc.start(t);
                     osc.stop(t + 0.8);
                 }
                 else if (type === 'green') {
-                     // Safe Ding (Ascending) - LEBIH NYARING & JELAS
                     const { osc, gain } = createOsc('sine');
-                    osc.frequency.setValueAtTime(800, t); // Higher start
-                    osc.frequency.linearRampToValueAtTime(1500, t + 0.15); // Higher end
+                    osc.frequency.setValueAtTime(800, t); 
+                    osc.frequency.linearRampToValueAtTime(1500, t + 0.15); 
                     gain.gain.setValueAtTime(0, t);
-                    gain.gain.linearRampToValueAtTime(0.4, t + 0.05); // Louder
+                    gain.gain.linearRampToValueAtTime(0.6, t + 0.05); 
                     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
                     osc.start(t);
                     osc.stop(t + 0.6);
                 }
                 else if (type === 'tension') {
-                    // Deep Heartbeat (Kick Drum Synthesis)
-                    const { osc, gain } = createOsc('sine');
+                    // NEW TENSION SOUND: "INDUSTRIAL PULSE"
+                    // Menggunakan Sawtooth + Low Frequency untuk efek 'Gritty' dan Keras
+                    const { osc, gain } = createOsc('sawtooth');
                     
-                    // Pitch drop for "Thump" sound
-                    osc.frequency.setValueAtTime(150, t);
-                    osc.frequency.exponentialRampToValueAtTime(0.01, t + 0.5);
+                    // Suara turun cepat dari 300Hz ke 50Hz (Efek 'Ziiiuung')
+                    osc.frequency.setValueAtTime(300, t);
+                    osc.frequency.exponentialRampToValueAtTime(50, t + 0.3);
                     
-                    // Volume envelope
-                    gain.gain.setValueAtTime(0.5, t);
-                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+                    // Amplop suara tajam
+                    gain.gain.setValueAtTime(0.6, t); // Volume Keras
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
                     
                     osc.start(t);
-                    osc.stop(t + 0.5);
+                    osc.stop(t + 0.3);
                 }
             },
 
@@ -413,10 +406,10 @@
                 // Play immediately
                 this.play('tension');
                 
-                // Loop Detak Jantung (Heartbeat) - Sekitar 800ms
+                // Loop dipercepat jadi 600ms (lebih tegang)
                 this.dangerInterval = setInterval(() => {
                     this.play('tension');
-                }, 800);
+                }, 600);
             },
 
             stopDangerLoop: function() {
