@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Granny Game - Ultimate Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Orbitron:wght@700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif;
+            background-color: #111827;
+            overflow: hidden;
+            /* Mencegah pull-to-refresh pada mobile */
+            overscroll-behavior: none;
+        }
+
+        /* Background Pattern */
+        .bg-pattern {
+            background-image: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.05;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+        }
+
+        /* Transisi Halus */
+        #game-bg { transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .hidden { display: none !important; }
+
+        /* Font Khusus */
+        .font-game { font-family: 'Black Ops One', system-ui; }
+        .font-digital { font-family: 'Orbitron', monospace; }
+
+        /* Animasi Fase Bahaya */
+        @keyframes pulse-red-bg {
+            0%, 100% { background-color: #7f1d1d; box-shadow: inset 0 0 50px #000; }
+            50% { background-color: #991b1b; box-shadow: inset 0 0 20px #000; }
+        }
+        .animate-danger-zone { 
+            animation: pulse-red-bg 0.8s infinite; 
+        }
+
+        /* Vignette Effect */
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: 0 0 100px rgba(0,0,0,0.9) inset;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Scrollbar custom */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        
+        /* Glassmorphism Card */
+        .glass-panel {
+            background: rgba(31, 41, 55, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Custom Select Style */
+        select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='gray' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        /* Button Active Effect */
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="text-white h-screen flex flex-col relative touch-manipulation">
+
+    <!-- Background Layer yang berubah warna -->
+    <div id="game-bg" class="absolute inset-0 bg-gray-900 z-[-2]"></div>
+    <div class="bg-pattern"></div>
+    
+    <!-- Vignette overlay -->
+    <div id="vignette-overlay" class="vignette hidden transition-opacity duration-500 opacity-0"></div>
+
+    <!-- ================== HALAMAN SETUP (Awal) ================== -->
+    <div id="setup-screen" class="flex-1 flex flex-col justify-center items-center p-4 overflow-y-auto relative z-10 w-full">
+        
+        <!-- Judul Besar -->
+        <div class="mb-6 md:mb-8 text-center animate-bounce mt-4 md:mt-0">
+            <h1 class="text-4xl md:text-6xl font-game text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-lg tracking-wider">
+                GRANNY
+            </h1>
+            <p class="text-gray-400 tracking-[0.3em] text-[10px] md:text-sm font-semibold mt-1">Yeah Game</p>
+        </div>
+
+        <div class="glass-panel p-5 md:p-8 rounded-2xl shadow-2xl w-full max-w-md mx-auto border border-white/10">
+            
+            <!-- Input Waktu -->
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wide"><i class="fas fa-stopwatch mr-2"></i>Waktu (Detik)</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="relative group">
+                    <label class="block text-[10px] text-green-400 mb-1 font-bold text-center uppercase tracking-widest">Aman</label>
+                    <input type="number" id="input-move-time" value="30" class="w-full bg-gray-900/50 border border-green-500/30 p-3 rounded-xl text-white font-digital text-2xl text-center focus:outline-none focus:border-green-500 transition shadow-inner">
+                </div>
+                <div class="relative group">
+                    <label class="block text-[10px] text-red-400 mb-1 font-bold text-center uppercase tracking-widest">Diam</label>
+                    <input type="number" id="input-freeze-time" value="10" class="w-full bg-gray-900/50 border border-red-500/30 p-3 rounded-xl text-white font-digital text-2xl text-center focus:outline-none focus:border-red-500 transition shadow-inner">
+                </div>
+            </div>
+
+            <hr class="border-gray-700 mb-5">
+
+            <!-- Input Pemain Baru -->
+            <div class="mb-4">
+                <label class="block text-xs text-gray-400 mb-2 font-bold uppercase tracking-wide">Nama Pemain</label>
+                <div class="flex gap-2">
+                    <input type="text" id="input-player-name" placeholder="Ketik nama..." class="flex-1 bg-gray-800 border border-gray-600 p-3 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-500" onkeypress="handleEnter(event)">
+                    <button onclick="addPlayerFromInput()" class="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-5 rounded-lg font-bold shadow-lg transition flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Area Histori (Dropdown Baru) -->
+            <div id="history-section" class="mb-6">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Atau Pilih Sebelumnya</label>
+                    <button onclick="clearHistory()" class="text-[10px] text-red-500 hover:text-red-400 hover:underline">Hapus Semua</button>
+                </div>
+                <div class="relative">
+                    <select id="history-dropdown" onchange="addFromHistory(this.value)" class="w-full appearance-none bg-gray-800 border border-gray-600 text-gray-300 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block p-3 pr-8 transition cursor-pointer hover:bg-gray-750">
+                        <option value="" disabled selected>📂 Pilih pemain lama...</option>
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Daftar Pemain yang AKAN MAIN -->
+            <div class="mb-6">
+                <div class="flex justify-between items-end mb-2">
+                    <label class="block text-xs text-gray-300 font-bold uppercase tracking-wide">Skuad Main <span id="player-count" class="text-yellow-500 ml-1">(0)</span></label>
+                </div>
+                <ul id="player-list-ui" class="bg-black/30 rounded-xl p-2 min-h-[60px] max-h-32 overflow-y-auto space-y-1 border border-white/5 shadow-inner">
+                    <!-- List pemain aktif -->
+                </ul>
+                <p id="player-error" class="text-red-400 text-xs mt-3 hidden text-center bg-red-900/20 p-2 rounded-lg border border-red-500/20 animate-pulse"><i class="fas fa-exclamation-circle mr-1"></i> Minimal 2 pemain diperlukan!</p>
+            </div>
+
+            <button onclick="initGame()" class="group w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black py-4 rounded-xl text-lg md:text-xl transition transform shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2">
+                <span>START GAME</span>
+                <i class="fas fa-play text-xs group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </div>
+        
+        <!-- Toggle Audio Button (Simple) -->
+        <div class="mt-4">
+            <button onclick="SoundSystem.test()" class="text-[10px] text-gray-500 hover:text-yellow-500 transition flex items-center gap-1">
+                <i class="fas fa-volume-up"></i> Tes Audio
+            </button>
+        </div>
+        
+        <div class="mt-2 text-[10px] text-gray-600 pb-4">
+            Dibuat oleh Syahrul
+        </div>
+    </div>
+
+    <!-- ================== LAYAR GACHA / READY ================== -->
+    <div id="gacha-modal" class="hidden absolute inset-0 bg-black/95 z-[60] flex flex-col justify-center items-center text-center p-6">
+        <h2 id="gacha-title" class="text-gray-400 text-sm md:text-lg tracking-[0.3em] mb-4 md:mb-8 uppercase animate-pulse">MENGACAK PEMAIN MENJADI GRANNY...</h2>
+        
+        <!-- Area Nama Besar -->
+        <div id="gacha-name" class="text-5xl md:text-8xl font-game text-yellow-500 mb-8 md:mb-12 drop-shadow-[0_0_20px_rgba(234,179,8,0.5)] transition-transform duration-100 px-4 break-words w-full">---</div>
+        
+        <div id="gacha-result-container" class="hidden flex flex-col items-center gap-6 animate-fade-in-up w-full max-w-sm">
+            <div class="flex flex-col items-center gap-1">
+                <p id="gacha-subtitle" class="text-white text-sm md:text-lg font-bold uppercase tracking-wider bg-gray-800 px-6 py-2 rounded-full border border-gray-700">Granny Terpilih!</p>
+                <!-- Info Durasi Granny Sebelumnya -->
+                <p id="gacha-prev-duration" class="text-xs text-yellow-400 font-mono mt-2 hidden">Granny sebelumnya bertahan: 00:00</p>
+            </div>
+            
+            <button onclick="confirmReady()" class="w-full group relative inline-flex items-center justify-center px-8 py-4 overflow-hidden font-bold text-white transition-all duration-300 bg-green-600 rounded-2xl hover:bg-green-500 shadow-[0_0_30px_rgba(34,197,94,0.4)] mt-4">
+                <span class="relative w-full text-center text-xl md:text-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3">
+                    <i class="fas fa-check-circle"></i>OKE SIAP!
+                </span>
+            </button>
+            <p class="text-[10px] md:text-xs text-gray-500 mt-2">Klik tombol di atas untuk memulai waktu</p>
+        </div>
+    </div>
+
+    <!-- ================== HALAMAN GAME (Main) ================== -->
+    <div id="game-screen" class="hidden flex-1 relative flex flex-col z-10 h-full">
+        
+        <!-- Header Info (Mobile Optimized) -->
+        <div class="absolute top-0 left-0 w-full p-3 md:p-6 flex justify-between items-start z-20 pointer-events-none">
+            <!-- Box Nama Granny -->
+            <div class="glass-panel px-3 py-2 rounded-lg border-l-4 border-yellow-500 max-w-[50%] pointer-events-auto shadow-lg">
+                <h2 class="text-[9px] md:text-xs text-gray-400 uppercase tracking-widest font-bold">Current Granny</h2>
+                <div class="text-xl md:text-3xl font-black text-white truncate" id="current-granny-name">-</div>
+                <!-- TIMER DURASI JABATAN -->
+                <div id="granny-session-timer" class="text-[10px] md:text-xs text-yellow-300 font-mono mt-1 opacity-80 flex items-center gap-1">
+                    <i class="fas fa-stopwatch"></i> <span id="granny-timer-text">00:00</span>
+                </div>
+            </div>
+            
+            <!-- Box Skor -->
+            <div class="glass-panel p-2 md:p-3 rounded-lg text-right max-h-28 md:max-h-40 overflow-y-auto w-28 md:w-48 pointer-events-auto shadow-lg">
+                <h3 class="text-[9px] md:text-[10px] text-gray-400 uppercase font-bold mb-1 border-b border-gray-600 pb-1">Kena (Skor)</h3>
+                <ul id="score-board" class="text-[10px] md:text-xs space-y-1">
+                    <!-- Skor pemain -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Area Timer Tengah -->
+        <div class="flex-1 flex flex-col justify-center items-center z-10 relative px-4">
+            <!-- Status Text -->
+            <div id="status-container" class="mb-2 md:mb-8 transform transition-transform duration-300 mt-16 md:mt-0">
+                <h1 id="status-text" class="text-3xl md:text-6xl font-game uppercase tracking-widest text-center drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">SIAP?</h1>
+            </div>
+            
+            <!-- Timer (Responsive Text Size) -->
+            <div class="relative group w-full flex justify-center">
+                <!-- Ring hanya hiasan desktop/tablet, di hp bisa mengganggu kalau terlalu besar -->
+                <div id="timer-ring" class="hidden md:block absolute -inset-8 rounded-full border-4 border-white/10 opacity-50 scale-90 transition-transform duration-700"></div>
+                <!-- Text size fluid: text-7xl di mobile, text-9xl di tablet, text-13xl di desktop -->
+                <div id="timer-display" class="text-8xl md:text-9xl lg:text-[13rem] font-digital font-bold leading-none drop-shadow-2xl tabular-nums tracking-tighter text-white transition-colors duration-300 text-center">00</div>
+            </div>
+        </div>
+
+        <!-- Tombol Kontrol Bawah (Mobile Optimized) -->
+        <div class="p-4 md:p-8 pb-8 md:pb-12 flex flex-col md:flex-row justify-center gap-3 md:gap-4 z-20 w-full max-w-2xl mx-auto">
+            <button onclick="togglePause()" id="btn-pause" class="w-full md:flex-1 bg-white text-black py-4 md:py-5 rounded-2xl font-black text-lg md:text-2xl shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-gray-100 transition border-b-[6px] border-gray-300 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-3 order-1 md:order-none">
+                <i class="fas fa-hand-paper"></i> STOP / TANGKAP
+            </button>
+            <!-- Tombol Reset kecil di mobile -->
+            <button onclick="resetGame()" class="w-full md:w-auto bg-gray-800 text-red-500 px-6 py-3 md:py-4 rounded-xl font-bold text-sm md:text-lg hover:bg-gray-700 transition border border-gray-700 hover:text-red-400 order-2 md:order-none">
+                <i class="fas fa-power-off mr-2 md:mr-0"></i> <span class="md:hidden">RESET GAME</span>
+            </button>
+        </div>
+
+        <!-- Modal Seleksi Siapa yang Kena -->
+        <div id="pause-modal" class="hidden absolute inset-0 bg-black/95 backdrop-blur-xl flex flex-col justify-center items-center z-50 transition-opacity duration-300 p-4">
+            <h2 class="text-xl md:text-4xl font-game text-red-500 mb-2 uppercase tracking-widest animate-pulse text-center">Siapa Yang Tertangkap?</h2>
+            <p class="text-gray-500 text-xs md:text-sm mb-6 text-center">Pilih korban untuk menjadi Granny berikutnya</p>
+            
+            <div id="selection-list" class="grid grid-cols-2 gap-3 w-full max-w-lg max-h-[55vh] overflow-y-auto custom-scroll p-1">
+                <!-- Tombol nama pemain -->
+            </div>
+            
+            <button onclick="resumeGame()" class="mt-6 group text-gray-400 hover:text-white transition flex items-center gap-2 py-3 px-6 rounded-full border border-gray-800 hover:border-gray-600 bg-gray-900">
+                <i class="fas fa-play text-xs"></i> 
+                <span class="font-bold text-sm">Batal (Lanjut Main)</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STATE ---
+        let activePlayers = []; 
+        let savedHistory = []; 
+        let currentGrannyIndex = -1;
+        
+        let config = { moveTime: 30, freezeTime: 10 };
+        let timerState = { time: 0, isMovingPhase: true, interval: null, isRunning: false };
+        
+        // Timer Durasi Granny
+        let grannySessionSeconds = 0;
+
+        // --- SOUND SYSTEM (Web Audio API - Enhanced) ---
+        const SoundSystem = {
+            ctx: null,
+            dangerInterval: null, 
+
+            init: function() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            play: function(type) {
+                this.init();
+                const t = this.ctx.currentTime;
+                
+                // Helper to create basic osc chain
+                const createOsc = (waveType) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = waveType;
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    return { osc, gain };
+                };
+
+                if (type === 'click') {
+                    // UI Click - High Tech Blip
+                    const { osc, gain } = createOsc('sine');
+                    osc.frequency.setValueAtTime(1000, t);
+                    osc.frequency.exponentialRampToValueAtTime(100, t + 0.1);
+                    gain.gain.setValueAtTime(0.2, t);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                    osc.start(t);
+                    osc.stop(t + 0.1);
+                } 
+                else if (type === 'start') {
+                    // Success Chord (C Major Arpeggio-ish)
+                    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                    notes.forEach((freq, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        
+                        // Strum effect
+                        const start = t + (i * 0.05);
+                        osc.frequency.value = freq;
+                        
+                        gain.gain.setValueAtTime(0, start);
+                        gain.gain.linearRampToValueAtTime(0.1, start + 0.05);
+                        gain.gain.exponentialRampToValueAtTime(0.001, start + 1.2);
+                        
+                        osc.start(start);
+                        osc.stop(start + 1.2);
+                    });
+                }
+                else if (type === 'tick') {
+                    // Mechanical Tick
+                    const { osc, gain } = createOsc('square');
+                    osc.frequency.setValueAtTime(800, t);
+                    gain.gain.setValueAtTime(0.08, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+                    osc.start(t);
+                    osc.stop(t + 0.03);
+                }
+                else if (type === 'alarm') {
+                    // Warning Siren (Modulated Sawtooth) - LEBIH NYARING & KERAS
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    
+                    osc.type = 'sawtooth';
+                    // Pitch sweep up/down higher frequencies
+                    osc.frequency.setValueAtTime(600, t);
+                    osc.frequency.linearRampToValueAtTime(1200, t + 0.4);
+                    osc.frequency.linearRampToValueAtTime(600, t + 0.8);
+
+                    // Increase volume
+                    gain.gain.setValueAtTime(0.5, t);
+                    gain.gain.linearRampToValueAtTime(0.5, t + 0.6);
+                    gain.gain.linearRampToValueAtTime(0.001, t + 0.8);
+                    
+                    osc.start(t);
+                    osc.stop(t + 0.8);
+                }
+                else if (type === 'green') {
+                     // Safe Ding (Ascending) - LEBIH NYARING & JELAS
+                    const { osc, gain } = createOsc('sine');
+                    osc.frequency.setValueAtTime(800, t); // Higher start
+                    osc.frequency.linearRampToValueAtTime(1500, t + 0.15); // Higher end
+                    gain.gain.setValueAtTime(0, t);
+                    gain.gain.linearRampToValueAtTime(0.4, t + 0.05); // Louder
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+                    osc.start(t);
+                    osc.stop(t + 0.6);
+                }
+                else if (type === 'tension') {
+                    // Deep Heartbeat (Kick Drum Synthesis)
+                    const { osc, gain } = createOsc('sine');
+                    
+                    // Pitch drop for "Thump" sound
+                    osc.frequency.setValueAtTime(150, t);
+                    osc.frequency.exponentialRampToValueAtTime(0.01, t + 0.5);
+                    
+                    // Volume envelope
+                    gain.gain.setValueAtTime(0.5, t);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+                    
+                    osc.start(t);
+                    osc.stop(t + 0.5);
+                }
+            },
+
+            // --- SPAM SOUND ---
+            startDangerLoop: function() {
+                this.init();
+                if (this.dangerInterval) clearInterval(this.dangerInterval);
+                
+                // Play immediately
+                this.play('tension');
+                
+                // Loop Detak Jantung (Heartbeat) - Sekitar 800ms
+                this.dangerInterval = setInterval(() => {
+                    this.play('tension');
+                }, 800);
+            },
+
+            stopDangerLoop: function() {
+                if (this.dangerInterval) {
+                    clearInterval(this.dangerInterval);
+                    this.dangerInterval = null;
+                }
+            },
+            
+            test: function() {
+                this.play('start');
+            }
+        };
+
+        // --- DOM ELEMENTS ---
+        const gameBg = document.getElementById('game-bg');
+        const vignetteOverlay = document.getElementById('vignette-overlay');
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const playerListUI = document.getElementById('player-list-ui');
+        const scoreBoard = document.getElementById('score-board');
+        const statusText = document.getElementById('status-text');
+        const timerDisplay = document.getElementById('timer-display');
+        const grannyNameDisplay = document.getElementById('current-granny-name');
+        
+        // Element Baru untuk Durasi
+        const grannyTimerText = document.getElementById('granny-timer-text');
+        const gachaPrevDuration = document.getElementById('gacha-prev-duration');
+        
+        const pauseModal = document.getElementById('pause-modal');
+        const selectionList = document.getElementById('selection-list');
+        const playerCountSpan = document.getElementById('player-count');
+        const historyDropdown = document.getElementById('history-dropdown');
+
+        // GACHA ELEMENTS
+        const gachaModal = document.getElementById('gacha-modal');
+        const gachaName = document.getElementById('gacha-name');
+        const gachaTitle = document.getElementById('gacha-title');
+        const gachaResultContainer = document.getElementById('gacha-result-container');
+        const gachaSubtitle = document.getElementById('gacha-subtitle');
+
+        // --- LOAD HISTORY ---
+        window.onload = function() {
+            const stored = localStorage.getItem('grannyPlayerHistory');
+            if (stored) {
+                savedHistory = JSON.parse(stored);
+                renderHistory();
+            }
+        };
+
+        // --- HELPER FORMAT TIME ---
+        function formatDuration(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+        }
+
+        // --- SETUP LOGIC ---
+        function handleEnter(e) { if (e.key === 'Enter') addPlayerFromInput(); }
+
+        function addPlayerFromInput() {
+            const input = document.getElementById('input-player-name');
+            const name = input.value.trim();
+            if (name) {
+                SoundSystem.play('click'); // SFX
+                addPlayerToActiveList(name);
+                saveToHistory(name);
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function saveToHistory(name) {
+            const exists = savedHistory.some(h => h.toLowerCase() === name.toLowerCase());
+            if (!exists) {
+                savedHistory.push(name);
+                localStorage.setItem('grannyPlayerHistory', JSON.stringify(savedHistory));
+                renderHistory();
+            }
+        }
+
+        function clearHistory() {
+            if(confirm("Hapus semua riwayat pemain?")) {
+                SoundSystem.play('click');
+                savedHistory = [];
+                localStorage.removeItem('grannyPlayerHistory');
+                renderHistory();
+            }
+        }
+
+        function renderHistory() {
+            // Reset Dropdown
+            historyDropdown.innerHTML = '<option value="" disabled selected>📂 Pilih dari Riwayat...</option>';
+            
+            if (savedHistory.length > 0) {
+                savedHistory.sort().forEach(name => {
+                    const isActive = activePlayers.some(p => p.name === name);
+                    if (!isActive) {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.text = name;
+                        historyDropdown.appendChild(option);
+                    }
+                });
+            }
+        }
+
+        function addFromHistory(name) {
+            if(!name) return;
+            SoundSystem.play('click');
+            addPlayerToActiveList(name);
+            historyDropdown.value = "";
+            renderHistory();
+        }
+
+        function addPlayerToActiveList(name) {
+            if (activePlayers.some(p => p.name === name)) return;
+            activePlayers.push({ name: name, grannyCount: 0 });
+            renderActiveList();
+            renderHistory(); 
+        }
+
+        function removeActivePlayer(index) {
+            SoundSystem.play('click');
+            activePlayers.splice(index, 1);
+            renderActiveList();
+            renderHistory(); 
+        }
+
+        function renderActiveList() {
+            playerCountSpan.innerText = `(${activePlayers.length})`;
+            playerListUI.innerHTML = activePlayers.map((p, index) => `
+                <li class="bg-gray-800/80 px-3 py-3 rounded-lg flex justify-between items-center group hover:bg-gray-700 transition border border-gray-700 mb-1">
+                    <span class="font-bold text-sm text-white pl-2">${p.name}</span>
+                    <button onclick="removeActivePlayer(${index})" class="text-gray-500 hover:text-red-400 w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/20 transition">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
+                </li>
+            `).join('');
+            
+            if(activePlayers.length >= 2) document.getElementById('player-error').classList.add('hidden');
+        }
+
+        function initGame() {
+            SoundSystem.play('click');
+            if (activePlayers.length < 2) {
+                document.getElementById('player-error').classList.remove('hidden');
+                return;
+            }
+            config.moveTime = parseInt(document.getElementById('input-move-time').value) || 30;
+            config.freezeTime = parseInt(document.getElementById('input-freeze-time').value) || 10;
+
+            setupScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            // Reset Timer Granny
+            grannySessionSeconds = 0;
+            grannyTimerText.innerText = "00:00";
+            
+            triggerGachaAnimation(true);
+        }
+
+        // --- GACHA & READY LOGIC ---
+
+        function triggerGachaAnimation(isFirstTime, prevDurationStr = null) {
+            gachaModal.classList.remove('hidden');
+            gachaResultContainer.classList.add('hidden');
+            gachaTitle.innerText = isFirstTime ? "MENGACAK GRANNY..." : "GRANNY TERTANGKAP!";
+            gachaTitle.className = "text-gray-400 text-sm md:text-xl tracking-[0.3em] mb-4 md:mb-8 uppercase animate-pulse";
+            
+            let counter = 0;
+            const maxCount = 20; 
+            const intervalTime = 100; 
+            
+            const gachaInterval = setInterval(() => {
+                const randIndex = Math.floor(Math.random() * activePlayers.length);
+                gachaName.innerText = activePlayers[randIndex].name;
+                gachaName.classList.toggle('scale-105'); 
+                SoundSystem.play('tick'); // SFX Tick saat acak
+                counter++;
+
+                if (counter >= maxCount) {
+                    clearInterval(gachaInterval);
+                    finalizeGacha(isFirstTime, prevDurationStr);
+                }
+            }, intervalTime);
+        }
+
+        function finalizeGacha(isFirstTime, prevDurationStr) {
+            if (isFirstTime) {
+                currentGrannyIndex = Math.floor(Math.random() * activePlayers.length);
+                activePlayers[currentGrannyIndex].grannyCount++; 
+            }
+            
+            const winnerName = activePlayers[currentGrannyIndex].name;
+            gachaName.innerText = winnerName;
+            gachaName.classList.remove('scale-105');
+            gachaName.classList.add('scale-110', 'text-white'); 
+            SoundSystem.play('start'); // SFX Chime selesai acak
+
+            gachaTitle.innerText = isFirstTime ? "GRANNY PERTAMA ADALAH:" : "GRANNY BERIKUTNYA:";
+            gachaTitle.className = "text-yellow-500 font-bold text-sm md:text-xl tracking-[0.2em] mb-4 md:mb-8 uppercase";
+
+            gachaSubtitle.innerText = isFirstTime ? "Persiapkan Diri!" : `${winnerName} Kena!`;
+
+            // Tampilkan Durasi Granny Sebelumnya
+            if (!isFirstTime && prevDurationStr) {
+                gachaPrevDuration.classList.remove('hidden');
+                gachaPrevDuration.innerText = `Granny sebelumnya bertahan: ${prevDurationStr}`;
+            } else {
+                gachaPrevDuration.classList.add('hidden');
+            }
+
+            setTimeout(() => {
+                gachaResultContainer.classList.remove('hidden');
+            }, 300);
+        }
+
+        function confirmReady() {
+            SoundSystem.play('start'); // SFX Ready
+            gachaModal.classList.add('hidden');
+            gachaName.classList.remove('scale-110', 'text-white');
+            
+            // Reset timer session granny saat game dimulai
+            grannySessionSeconds = 0;
+            grannyTimerText.innerText = "00:00";
+            
+            startRound(true);
+        }
+
+        // --- GAME LOGIC ---
+        function updateScoreBoard() {
+            const sorted = [...activePlayers].sort((a, b) => b.grannyCount - a.grannyCount);
+            scoreBoard.innerHTML = sorted.map((p, i) => `
+                <li class="flex justify-between items-center ${i === 0 && p.grannyCount > 0 ? 'text-yellow-400 font-bold' : 'text-gray-400'}">
+                    <span class="truncate w-16 md:w-24">${p.name}</span>
+                    <span class="font-mono">${p.grannyCount}x</span>
+                </li>
+            `).join('');
+            grannyNameDisplay.innerText = activePlayers[currentGrannyIndex].name;
+        }
+
+        function startRound(resetToMove = false) {
+            updateScoreBoard();
+            if (resetToMove) {
+                timerState.isMovingPhase = true;
+                timerState.time = config.moveTime;
+            }
+            timerState.isRunning = true;
+            updateUI();
+            if (timerState.interval) clearInterval(timerState.interval);
+            timerState.interval = setInterval(gameLoop, 1000);
+        }
+
+        function gameLoop() {
+            // 1. Update Timer Fase Game
+            if (timerState.time > 0) {
+                timerState.time--;
+                timerDisplay.innerText = timerState.time < 10 ? `0${timerState.time}` : timerState.time;
+            } else {
+                switchPhase();
+            }
+
+            // 2. Update Timer Durasi Granny (Jabatannya)
+            // Ini berjalan terus selama game tidak di-pause
+            grannySessionSeconds++;
+            grannyTimerText.innerText = formatDuration(grannySessionSeconds);
+        }
+
+        function switchPhase() {
+            timerState.isMovingPhase = !timerState.isMovingPhase;
+            timerState.time = timerState.isMovingPhase ? config.moveTime : config.freezeTime;
+            
+            if (!timerState.isMovingPhase) {
+                // Masuk fase DIAM (Merah) -> Start Loop
+                SoundSystem.play('alarm'); // Main sirine awal
+                SoundSystem.startDangerLoop(); // Start spam sound
+            } else {
+                // Masuk fase GERAK (Hijau) -> Stop Loop
+                SoundSystem.stopDangerLoop(); 
+                SoundSystem.play('green'); 
+            }
+            
+            updateUI();
+        }
+
+        function updateUI() {
+            timerDisplay.innerText = timerState.time < 10 ? `0${timerState.time}` : timerState.time;
+            const statusContainer = document.getElementById('status-container');
+
+            if (timerState.isMovingPhase) {
+                // UI HIJAU
+                gameBg.className = "absolute inset-0 bg-emerald-600 z-[-2]";
+                vignetteOverlay.classList.remove('opacity-100');
+                vignetteOverlay.classList.add('hidden', 'opacity-0');
+                
+                statusText.innerText = "BERGERAK";
+                statusText.className = "text-3xl md:text-6xl font-game uppercase tracking-widest text-center text-white drop-shadow-lg transition-all";
+                timerDisplay.classList.remove('text-red-500', 'animate-pulse');
+                timerDisplay.classList.add('text-white');
+                
+                statusContainer.classList.remove('scale-110');
+            } else {
+                // UI MERAH
+                gameBg.className = "absolute inset-0 z-[-2] animate-danger-zone"; 
+                vignetteOverlay.classList.remove('hidden');
+                setTimeout(() => vignetteOverlay.classList.add('opacity-100'), 50); 
+                
+                statusText.innerText = "JANGAN GERAK!";
+                statusText.className = "text-4xl md:text-7xl font-game uppercase tracking-widest text-center text-red-500 drop-shadow-[0_0_15px_rgba(0,0,0,1)] animate-pulse transition-all";
+                timerDisplay.classList.remove('text-white');
+                timerDisplay.classList.add('text-red-500');
+                
+                statusContainer.classList.add('scale-110');
+            }
+        }
+
+        // --- PAUSE & SELECTION LOGIC ---
+        function togglePause() {
+            if (!timerState.isRunning) return;
+            SoundSystem.play('click');
+            SoundSystem.stopDangerLoop(); // Stop loop saat pause
+            clearInterval(timerState.interval);
+            timerState.isRunning = false;
+            pauseModal.classList.remove('hidden');
+            renderSelectionList();
+        }
+
+        function renderSelectionList() {
+            selectionList.innerHTML = activePlayers.map((p, index) => {
+                if (index === currentGrannyIndex) return ''; 
+                return `
+                    <button onclick="playerCaught(${index})" class="group relative bg-gray-900 hover:bg-red-900 border border-gray-700 hover:border-red-500 text-white font-bold py-4 md:py-6 px-4 rounded-xl shadow-lg transition-all duration-200 transform active:scale-95 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-50"></div>
+                        <span class="relative z-10 text-sm md:text-lg uppercase tracking-wider block truncate">${p.name}</span>
+                        <div class="text-red-500 text-[10px] md:text-xs mt-1">
+                            <i class="fas fa-skull"></i> TANGKAP
+                        </div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function playerCaught(index) {
+            SoundSystem.play('click');
+            // 1. Simpan durasi granny SEBELUMNYA (current)
+            const prevDurationStr = formatDuration(grannySessionSeconds);
+
+            // 2. Ganti Granny
+            activePlayers[index].grannyCount++;
+            currentGrannyIndex = index;
+            
+            // 3. UI logic
+            pauseModal.classList.add('hidden');
+            gachaModal.classList.remove('hidden');
+            gachaResultContainer.classList.add('hidden'); 
+            gachaName.innerText = activePlayers[index].name;
+
+            // 4. Panggil finalisasi dengan data durasi
+            finalizeGacha(false, prevDurationStr);
+        }
+
+        function resumeGame() {
+            SoundSystem.play('click');
+            pauseModal.classList.add('hidden');
+            timerState.isRunning = true;
+            timerState.interval = setInterval(gameLoop, 1000);
+            
+            // Jika lanjut main dan sedang fase merah, lanjutkan loop suara
+            if (!timerState.isMovingPhase) {
+                SoundSystem.startDangerLoop();
+            }
+        }
+
+        function resetGame() {
+            SoundSystem.play('click');
+            if(confirm("Kembali ke menu setup?")) {
+                SoundSystem.stopDangerLoop(); // Stop suara
+                clearInterval(timerState.interval);
+                gameScreen.classList.add('hidden');
+                setupScreen.classList.remove('hidden');
+                gameBg.className = "absolute inset-0 bg-gray-900 z-[-2]";
+                vignetteOverlay.classList.add('hidden', 'opacity-0');
+                
+                activePlayers = []; 
+                renderActiveList();
+                renderHistory();
+            }
+        }
+    </script>
+</body>
+</html>
