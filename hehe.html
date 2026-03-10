@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐻 untuk bubub · pesan manis & game imut + suara ✨</title>
+    <!-- font & style biar gemes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #ffe9f4 0%, #ffe0f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* latar lucu: bintang2 kecil */
+        body::before {
+            content: "✨🍰🐣🌸🍭🧸";
+            font-size: 32px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            opacity: 0.15;
+            white-space: nowrap;
+            rotate: -5deg;
+            pointer-events: none;
+        }
+        body::after {
+            content: "🐻‍❄️💖☁️🍼🎈🐥";
+            font-size: 40px;
+            position: absolute;
+            bottom: 20px;
+            right: 10px;
+            opacity: 0.2;
+            rotate: 8deg;
+            pointer-events: none;
+        }
+
+        .card-wrapper {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 60px 60px 50px 50px;
+            box-shadow: 0 20px 35px rgba(245, 150, 200, 0.25), 0 8px 20px rgba(255, 200, 220, 0.6), inset 0 2px 5px #fff9;
+            padding: 28px 20px 32px;
+            border: 3px solid white;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* progress bar imut */
+        .progress-bubble {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .step-dot {
+            width: 20px;
+            height: 20px;
+            background: #ffc1d6;
+            border-radius: 30px;
+            transition: 0.3s;
+            box-shadow: 0 2px 0 #d48ca2;
+        }
+        .step-dot.active {
+            background: #fe83a6;
+            width: 40px;
+            background: #ff9abb;
+            box-shadow: 0 0 0 3px #ffe2ed, 0 3px 0 #b16d86;
+        }
+
+        /* kotak pesan / kontainer utama */
+        .message-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 48px 48px 48px 48px;
+            padding: 32px 24px 28px;
+            border: 4px solid white;
+            box-shadow: 0 12px 0 #ffb8cf, 0 15px 25px #ffacc8;
+            margin-bottom: 28px;
+            transition: all 0.2s ease;
+        }
+
+        .gif-place {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 28px;
+            filter: drop-shadow(0 8px 6px #ffbfd4);
+        }
+        .gif-place img {
+            max-width: 140px;
+            height: auto;
+            border-radius: 100px;
+            background: #ffe5f0;
+            padding: 8px 6px 4px;
+            border: 4px solid white;
+            object-fit: cover;
+        }
+
+        .text-bubble {
+            background: #fee9f1;
+            padding: 22px 18px;
+            border-radius: 35px 35px 35px 10px;
+            border: 3px solid #ffffff;
+            box-shadow: inset 0 -3px 0 #fbb0cb, 0 7px 0 #e7a0bb;
+            margin-bottom: 18px;
+        }
+
+        .text-bubble p {
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: #a34563;
+            text-align: center;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .text-bubble span {
+            font-size: 1.8rem;
+            display: inline-block;
+            filter: drop-shadow(2px 2px 0 #ffbcd6);
+        }
+
+        /* game mini kecil */
+        .game-area {
+            background: #ffdbea;
+            border-radius: 40px;
+            padding: 22px 12px 18px;
+            margin: 20px 0 15px;
+            border: 4px solid white;
+            box-shadow: inset 0 -3px 0 #f5aac5, 0 6px 0 #d47a9e;
+        }
+
+        .game-title {
+            font-size: 1.2rem;
+            color: #8f4763;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .click-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .heart-btn {
+            background: #ff98bb;
+            border: none;
+            border-radius: 120px;
+            padding: 12px 40px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 0 #bd6f8d;
+            box-shadow: 0 8px 0 #9e5775, 0 10px 15px #fec7db;
+            cursor: pointer;
+            transition: 0.07s linear;
+            border: 3px solid #ffeef4;
+            letter-spacing: 3px;
+        }
+        .heart-btn:active {
+            transform: translateY(7px);
+            box-shadow: 0 2px 0 #9e5775, 0 5px 12px #fec7db;
+        }
+
+        .click-count {
+            background: #ffeef4;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #b94e73;
+            border: 3px solid #ffbfd7;
+            display: inline-block;
+        }
+
+        .counter-reward {
+            font-size: 1rem;
+            background: #ffc8dd;
+            padding: 8px 15px;
+            border-radius: 40px;
+            color: #582b3a;
+            font-weight: 600;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            gap: 14px;
+        }
+
+        .nav-btn {
+            background: #ffd0e1;
+            border: 4px solid white;
+            padding: 16px 24px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ae4d70;
+            box-shadow: 0 6px 0 #dd9eb6, 0 8px 15px #ffc1d4;
+            cursor: pointer;
+            transition: 0.07s;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .nav-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 1px 0 #dd9eb6, 0 5px 12px #f8b7cf;
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #dd9eb6;
+            pointer-events: none;
+        }
+
+        .tiny-emoji {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #b37792;
+            font-weight: 600;
+            font-size: 1.1rem;
+            filter: drop-shadow(0 3px 0 white);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card-wrapper" id="app">
+    <!-- progress step imut -->
+    <div class="progress-bubble" id="progressDots">
+        <span class="step-dot" id="dot1"></span>
+        <span class="step-dot" id="dot2"></span>
+        <span class="step-dot" id="dot3"></span>
+        <span class="step-dot" id="dot4"></span>
+        <span class="step-dot" id="dot5"></span>
+    </div>
+
+    <!-- kotak utama ganti-ganti -->
+    <div class="message-box" id="messageBox">
+        <!-- gambar gif lucu -->
+        <div class="gif-place" id="gifContainer">
+            <img src="https://media.tenor.com/CzdVW8Aq3KYAAAAi/cat-chicken.gif" alt="bubub gif lucu">
+        </div>
+
+        <!-- teks pesan -->
+        <div class="text-bubble" id="textBubble">
+            <p id="mainText">🐣 hey bubub...<br>kenapa sedih?</p>
+        </div>
+
+        <!-- GAME MINI IMUT (muncul di step tertentu) -->
+        <div id="gameSpot" class="game-area" style="display: none;">
+            <div class="game-title">🍡 <span>tekan gemas!</span> 🧸</div>
+            <div class="click-game">
+                <button class="heart-btn" id="clickGameBtn">❤️</button>
+                <div class="click-count" id="clickCounter">0</div>
+                <div class="counter-reward" id="gameMessage">kumpulin 7 love, bubub!</div>
+            </div>
+        </div>
+
+        <!-- tombol next & prev -->
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prevBtn" disabled> 🐻  sebelumnya</button>
+            <button class="nav-btn" id="nextBtn">selanjutnya  🐰</button>
+        </div>
+    </div>
+
+    <footer> 🍰 buat bubub yang paling lucu · semangat ya! 🩷 </footer>
+</div>
+
+<!-- tambahan stiker apung (opsional) -->
+<div style="position:fixed; bottom:12px; left:12px; opacity:0.4; font-size:3rem; pointer-events:none;">🫧🧸</div>
+<div style="position:fixed; top:10px; right:20px; opacity:0.4; font-size:3rem; pointer-events:none;">🌸🐣</div>
+
+<script>
+    (function() {
+        // ---------- 🎵 SOUND EFFECT GEMES (Web Audio API) ----------
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        // inisialisasi audio context pas pertama interaksi (biar ga kena autoplay block)
+        function initAudio() {
+            if (audioCtx) return; // sudah ada
+            audioCtx = new AudioContext();
+        }
+
+        // fungsi bikin suara "pop" kecil imut
+        function playPopSound() {
+            if (!audioCtx) {
+                // coba init, tapi karena butuh user gesture, kita akan init di tiap handler
+                // di sini kita buat saja jika null, return dulu, nanti dipanggil ulang setelah ada context
+                if (!audioCtx) return;
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => playPop()).catch(() => {});
+                return;
+            }
+            playPop();
+            
+            function playPop() {
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.value = 620 + Math.random() * 80; // nada agak acak biar lucu
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.12);
+            }
+        }
+
+        // suara klik love (lebih panjang dikit dan ceria)
+        function playLoveSound() {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => playLove());
+                return;
+            }
+            playLove();
+
+            function playLove() {
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc1.type = 'triangle';
+                osc1.frequency.value = 880; // nada A5
+                osc2.type = 'sine';
+                osc2.frequency.value = 1320; // nada E6
+                
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 0.18);
+                osc2.stop(now + 0.18);
+            }
+        }
+
+        // suara special untuk game complete (little jingle)
+        function playCompleteSound() {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => playComplete());
+                return;
+            }
+            playComplete();
+
+            function playComplete() {
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.value = 660;
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.2);
+                
+                // nada kedua bentar lagi
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.value = 880;
+                gain2.gain.setValueAtTime(0.1, now + 0.1);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start(now + 0.1);
+                osc2.stop(now + 0.3);
+            }
+        }
+
+        // ---------- DATA & ELEMEN (sama seperti sebelumnya) ----------
+        const steps = [
+            {   // index 0
+                text: "🐣 hey kei... <br> lagi badmod yak D: ?",
+                gif: "https://media.tenor.com/CzdVW8Aq3KYAAAAi/cat-chicken.gif",
+                gameActive: false
+            },
+            {   // index 1
+                text: "🌷saya gak tau sih apa yang terjadi sama kamu kemarin... <br> tapi semangat terus dong... lucu tau kalau ko ketawa XD",
+                gif: "https://media.tenor.com/0iljB_sB5F4AAAAi/cat-kiss.gif",
+                gameActive: false
+            },
+            {   // index 2 – game dimunculkan
+                text: "💖 yuk main ini bentar! <br> tekan tombol dibawah buat naikin progresnya hehe",
+                gif: "https://media.tenor.com/qCEEBpW1EiIAAAAi/bear-peach.gif",
+                gameActive: true,
+                gameGoal: "kumpulin 7 love, nanti ada kejutan!"
+            },
+            {   // index 3
+                text: "EHEHEHEHEH Sedikit Membaik??😅",
+                gif: "https://media.tenor.com/NhM-t9w3uNcAAAAi/hug.gif",
+                gameActive: false
+            },
+            {   // index 4
+                text: "🐻‍❄️ Kei itu lucu kalau senyum. <br> jadi jangan lupa bahagia ya!",
+                gif: "https://media.tenor.com/SgkFdmZgvLMAAAAi/cat-cuddle.gif",
+                gameActive: false
+            }
+        ];
+
+        // elemen2
+        const mainText = document.getElementById('mainText');
+        const gifImg = document.querySelector('#gifContainer img');
+        const gameSpot = document.getElementById('gameSpot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const clickBtn = document.getElementById('clickGameBtn');
+        const clickSpan = document.getElementById('clickCounter');
+        const gameMsg = document.getElementById('gameMessage');
+
+        // progress dots
+        const dot1 = document.getElementById('dot1');
+        const dot2 = document.getElementById('dot2');
+        const dot3 = document.getElementById('dot3');
+        const dot4 = document.getElementById('dot4');
+        const dot5 = document.getElementById('dot5');
+        const dots = [dot1, dot2, dot3, dot4, dot5];
+
+        // state
+        let currentStep = 0;
+        let clickCount = 0;
+        const maxClicks = 7; // target love
+        let gameCompleted = false;
+
+        function updateDots(step) {
+            dots.forEach((dot, idx) => {
+                if (idx === step) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        function resetGameProgress() {
+            clickCount = 0;
+            gameCompleted = false;
+            if (clickSpan) clickSpan.innerText = '0';
+            if (gameMsg) gameMsg.innerText = 'kumpulin 7 love, bubub!';
+            if (clickBtn) clickBtn.innerText = '❤️'; // kembalikan tombol
+        }
+
+        function renderStep() {
+            const step = steps[currentStep];
+            mainText.innerHTML = step.text;
+            gifImg.src = step.gif;
+
+            if (step.gameActive) {
+                gameSpot.style.display = 'block';
+                if (currentStep === 2) {
+                    resetGameProgress(); // selalu reset tiap masuk step 2
+                }
+            } else {
+                gameSpot.style.display = 'none';
+            }
+
+            prevBtn.disabled = (currentStep === 0);
+            // next disabled hanya jika step 2 dan game belum complete
+            if (currentStep === 2 && !gameCompleted) {
+                nextBtn.disabled = true;
+            } else {
+                nextBtn.disabled = false;
+            }
+
+            updateDots(currentStep);
+        }
+
+        // 🎵 INTERAKSI: init audio & mainkan suara saat pertama tombol diklik (user gesture)
+        function safePlayPop() {
+            initAudio();    // pastikan context ada (kalau null, dibuat)
+            playPopSound();
+        }
+        function safePlayLove() {
+            initAudio();
+            playLoveSound();
+        }
+        function safePlayComplete() {
+            initAudio();
+            playCompleteSound();
+        }
+
+        function handleNext() {
+            safePlayPop(); // bunyi pindah halaman
+            if (currentStep < steps.length - 1) {
+                if (currentStep === 2 && !gameCompleted) {
+                    alert('🐰 ayo tekan love dulu sampai 7 kali, bubub!');
+                    return;
+                }
+                currentStep++;
+                renderStep();
+            }
+        }
+
+        function handlePrev() {
+            safePlayPop();
+            if (currentStep > 0) {
+                if (currentStep === 2) {
+                    resetGameProgress();
+                }
+                currentStep--;
+                renderStep();
+            }
+        }
+
+        function handleGameClick() {
+            // selalu init audio di klik pertama
+            initAudio();
+            
+            if (currentStep !== 2) return;
+            if (gameCompleted) return;
+
+            // bunyi love setiap klik
+            playLoveSound();
+
+            clickCount++;
+            if (clickCount > maxClicks) clickCount = maxClicks;
+
+            clickSpan.innerText = clickCount;
+
+            if (clickCount >= maxClicks) {
+                gameCompleted = true;
+                gameMsg.innerText = '💝 yeay! love penuh! mood bubub naik!';
+                nextBtn.disabled = false;
+                clickBtn.innerText = '💖';
+                // bunyi special complete
+                playCompleteSound();
+            } else {
+                gameMsg.innerText = `kumpulin ${maxClicks - clickCount} love lagi, bubub!`;
+            }
+        }
+
+        // pasang event listener
+        prevBtn.addEventListener('click', handlePrev);
+        nextBtn.addEventListener('click', handleNext);
+        clickBtn.addEventListener('click', handleGameClick);
+
+        // inisialisasi awal
+        resetGameProgress();
+        renderStep();
+
+        gifImg.onerror = function() {
+            this.src = 'https://media.tenor.com/CzdVW8Aq3KYAAAAi/cat-chicken.gif';
+        };
+
+        // Tambahan: kalau bubub menekan tombol love, kita pastikan audio context aktif dari gesture tombol
+        // sudah karena handleGameClick memanggil initAudio dan playLoveSound
+
+        // Supaya lebih aman, kita juga bisa coba aktifkan context saat mouseenter card? Tidak perlu, karena user gesture via tombol.
+        // Tapi kita bisa coba buat context saat pertama kali tombol next/prev ditekan — itu sudah cukup.
+        // Namun jika pengguna langsung menekan love di step2 tanpa pernah menekan next/prev, initAudio akan dipanggil di handleGameClick (love termasuk user gesture)
+        // jadi aman.
+
+        // sentuhan terakhir: bunyi juga ketika dot berubah? mungkin terlalu rame, biarkan hanya navigasi & love.
+    })();
+</script>
+</body>
+</html>
